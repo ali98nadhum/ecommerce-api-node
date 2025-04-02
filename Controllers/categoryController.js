@@ -5,6 +5,22 @@ const { uploadImageToUploadcare } = require("../utils/uploadImageToUploadcare");
 
 
 // ==================================
+// @desc Get category by slug
+// @route /api/v1/category/:slug
+// @method GET
+// @access public
+// ==================================
+module.exports.getOneCateogry = asyncHandler(async(req , res) => {
+    const category = await CategoryModel.findOne({slug:req.params.slug});
+    if(!category){
+        return res.status(404).json({message: "Category not found"})
+    }
+
+    res.status(200).json({data:category})
+})
+
+
+// ==================================
 // @desc Create a new Category
 // @route /api/v1/category
 // @method POST
