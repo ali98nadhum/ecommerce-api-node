@@ -1,4 +1,4 @@
-const { createCategory } = require("../Controllers/categoryController");
+const { createCategory, getOneCateogry } = require("../Controllers/categoryController");
 const router = require("express").Router();
 const uploadPhoto = require("../middlewares/multerConfig")
 
@@ -6,6 +6,9 @@ const uploadPhoto = require("../middlewares/multerConfig")
 
 router.route("/")
 .post(uploadPhoto.single("image"),createCategory)
+
+router.route("/:slug")
+.get(getOneCateogry)
 
 
 
