@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const { CategoryModel } = require("../model/CategoryModel");
 const slugify = require("slugify");
+const { uploadImageToUploadcare } = require("../utils/uploadImageToUploadcare");
 
 
 // ==================================
@@ -12,10 +13,17 @@ const slugify = require("slugify");
 module.exports.createCategory = asyncHandler(async(req , res) => {
     const {title} = req.body;
 
+    if(!req.file){
+        return res.status(400).json({message: "Image is required"});
+    }
+
+    const {imageUrl , pubilcId} = await uploadImageToUploadcare(req.file);
+
     // create category
     const newCategory = new CategoryModel({
         title,
-        slug:slugify(title)
+        slug:slugify(title),
+        image: {url:imageUrl , publicId}
     });
 
     await newCategory.save();
