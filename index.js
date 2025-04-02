@@ -19,11 +19,11 @@ app.use(cors({
 
 
 // Routes
-app.use("api/v1/category" , require("./Routes/categoryRoutes"));
+app.use("/api/v1/category" , require("./Routes/categoryRoutes"));
 
 
 
 // Run server
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 5000;
 app.listen(port , () => console.log(`Server is run on port ${port}`)
 )
