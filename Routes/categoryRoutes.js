@@ -1,11 +1,11 @@
 const { createCategory } = require("../Controllers/categoryController");
 const router = require("express").Router();
-const upload = require("../middlewares/multerConfig")
+const uploadPhoto = require("../middlewares/multerConfig")
 
 
 
 router.route("/")
-.post(upload.single("image"),createCategory)
+.post(uploadPhoto.single("image"),createCategory)
 
 
 

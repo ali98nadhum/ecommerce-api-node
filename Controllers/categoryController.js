@@ -17,7 +17,8 @@ module.exports.createCategory = asyncHandler(async(req , res) => {
         return res.status(400).json({message: "Image is required"});
     }
 
-    const {imageUrl , pubilcId} = await uploadImageToUploadcare(req.file);
+    const {imageUrl , publicId} = await uploadImageToUploadcare(req.file);
+    
 
     // create category
     const newCategory = new CategoryModel({
