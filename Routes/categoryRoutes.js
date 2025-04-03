@@ -12,6 +12,6 @@ router.route("/:slug").get(getOneCateogry);
 
 router.route("/:id")
 .delete(deleteCategoryValidator , deleteCategory)
-.put(updateCategoryValidator , updateCategory)
+.put(uploadPhoto.single("image"),updateCategoryValidator , updateCategory)
 
 module.exports = router;
