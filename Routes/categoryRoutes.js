@@ -1,4 +1,4 @@
-const { createCategory, getOneCateogry } = require("../Controllers/categoryController");
+const { createCategory, getOneCateogry, getAllCategories } = require("../Controllers/categoryController");
 const router = require("express").Router();
 const uploadPhoto = require("../middlewares/multerConfig");
 const { createCategoryValidator } = require("../utils/vaildators/CategoryVaildators");
@@ -6,7 +6,14 @@ const { createCategoryValidator } = require("../utils/vaildators/CategoryVaildat
 
 
 router.route("/")
-.post(uploadPhoto.single("image"),createCategoryValidator,createCategory)
+.post
+(
+    uploadPhoto.single("image"),
+    createCategoryValidator,
+    createCategory
+)
+.get(getAllCategories)
+
 
 router.route("/:slug")
 .get(getOneCateogry)
