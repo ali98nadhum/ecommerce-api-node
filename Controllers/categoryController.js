@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const { CategoryModel } = require("../model/CategoryModel");
 const slugify = require("slugify");
-const { uploadImageToUploadcare } = require("../utils/uploadImageToUploadcare");
+const { uploadImageToUploadcare , deleteImageFromUploadcare } = require("../utils/uploadImageToUploadcare");
 
 
 
@@ -82,6 +82,11 @@ module.exports.deleteCategory = asyncHandler(async(req , res) => {
     if(!category){
         return res.status(404).json({message: "Category not found"})
     }
+
+    // delete image from uploadcare
+      if (category.image.publicId) {
+        await deleteImageFromUploadcare(category.image.publicId);
+      }
 
     res.status(200).json({message: "category deleted"})
 })
