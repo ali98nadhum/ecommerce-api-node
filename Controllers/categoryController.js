@@ -16,6 +16,10 @@ module.exports.getAllCategories = asyncHandler(async(req , res) => {
     res.status(200).json({data:categories})
 })
 
+
+
+
+
 // ==================================
 // @desc Get category by slug
 // @route /api/v1/category/:slug
@@ -30,6 +34,10 @@ module.exports.getOneCateogry = asyncHandler(async(req , res) => {
 
     res.status(200).json({data:category})
 })
+
+
+
+
 
 
 // ==================================
@@ -58,4 +66,22 @@ module.exports.createCategory = asyncHandler(async(req , res) => {
     await newCategory.save();
 
     res.status(201).json({message: "category created" , data:newCategory})
+})
+
+
+
+
+// ==================================
+// @desc Delete category
+// @route /api/v1/category/:id
+// @method DELETE
+// @access private (only admin)
+// ==================================
+module.exports.deleteCategory = asyncHandler(async(req , res) => {
+    const category = await CategoryModel.findByIdAndDelete(req.params.id);
+    if(!category){
+        return res.status(404).json({message: "Category not found"})
+    }
+
+    res.status(200).json({message: "category deleted"})
 })
