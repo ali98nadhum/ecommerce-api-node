@@ -4,6 +4,18 @@ const slugify = require("slugify");
 const { uploadImageToUploadcare } = require("../utils/uploadImageToUploadcare");
 
 
+
+// ==================================
+// @desc Get All Categories
+// @route /api/v1/category
+// @method GET
+// @access public
+// ==================================
+module.exports.getAllCategories = asyncHandler(async(req , res) => {
+    const categories = await CategoryModel.find({});
+    res.status(200).json({data:categories})
+})
+
 // ==================================
 // @desc Get category by slug
 // @route /api/v1/category/:slug
