@@ -1,5 +1,5 @@
-const {createCategory,getOneCateogry,getAllCategories, deleteCategory} = require("../Controllers/categoryController");
-const {createCategoryValidator, deleteCategoryValidator} = require("../utils/vaildators/CategoryVaildators");
+const {createCategory,getOneCateogry,getAllCategories, deleteCategory, updateCategory} = require("../Controllers/categoryController");
+const {createCategoryValidator, deleteCategoryValidator, updateCategoryValidator} = require("../utils/vaildators/CategoryVaildators");
 const uploadPhoto = require("../middlewares/multerConfig");
 const router = require("express").Router();
 
@@ -12,5 +12,6 @@ router.route("/:slug").get(getOneCateogry);
 
 router.route("/:id")
 .delete(deleteCategoryValidator , deleteCategory)
+.put(updateCategoryValidator , updateCategory)
 
 module.exports = router;
