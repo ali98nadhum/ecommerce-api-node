@@ -9,3 +9,10 @@ exports.createCategoryValidator = [
     .isLength({max: 30}).withMessage("title must be less than 30 characters"),
     VaildatorMiddleware,
 ]
+
+
+exports.deleteCategoryValidator = [
+    check("id")
+    .isMongoId().withMessage("Invalid id category"),
+    VaildatorMiddleware,
+]
