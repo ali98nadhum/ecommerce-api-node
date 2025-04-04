@@ -18,3 +18,10 @@ exports.createSubCategoryValidator = [
     })),
     VaildatorMiddleware,
 ]
+
+
+exports.deleteSubCategoryValidator = [
+    check("id")
+    .isMongoId().withMessage("Invalid id "),
+    VaildatorMiddleware,
+]
