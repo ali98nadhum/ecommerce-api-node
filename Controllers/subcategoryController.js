@@ -33,6 +33,8 @@ module.exports.getOneSubcategory = asyncHandler(async(req , res) => {
     if(!subcategory){
         return res.status(404).json({message: "Subcategory not found"})
     }
+
+    res.status(200).json({data:subcategory})
 })
 
 
@@ -65,4 +67,28 @@ module.exports.createSubcategory = asyncHandler(async(req , res) => {
     await newSubcategory.save();
 
     res.status(201).json({message: "subcategory created" , data:newSubcategory})
+})
+
+
+
+
+
+
+
+// ==================================
+// @desc Delete subcategory by id
+// @route /api/v1/subcategory/:id
+// @method DELETE
+// @access private (only admin)
+// ==================================
+module.exports.deleteSubcategory = asyncHandler(async(req , res) => {
+    const subcategory = await SubcategoryModel.findByIdAndDelete(req.params.id);
+    if(!subcategory){
+        return res.status(404).json({message: "Subcategory not found"})
+    }
+
+     // delete image from uploadcare
+     await deleteImageFromUploadcare(subcategory.image.publicId);
+
+     res.status(200).json({message: "Subcategory deleted"})
 })
