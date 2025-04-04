@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const { SubcategoryModel } = require("../model/SubcategoryModel");
 const slugify = require("slugify");
-const { uploadImageToUploadcare } = require("../utils/uploadImageToUploadcare");
+const { uploadImageToUploadcare , deleteImageFromUploadcare } = require("../utils/uploadImageToUploadcare");
 
 
 // ==================================
@@ -88,7 +88,9 @@ module.exports.deleteSubcategory = asyncHandler(async(req , res) => {
     }
 
      // delete image from uploadcare
-     await deleteImageFromUploadcare(subcategory.image.publicId);
+     if (subcategory.image.publicId) {
+        await deleteImageFromUploadcare(subcategory.image.publicId);
+      }
 
      res.status(200).json({message: "Subcategory deleted"})
 })
