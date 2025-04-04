@@ -1,6 +1,6 @@
-const { createSubcategory, getAllSubcategory, getOneSubcategory, deleteSubcategory } = require("../Controllers/subcategoryController");
+const { createSubcategory, getAllSubcategory, getOneSubcategory, deleteSubcategory, updateSubcategory } = require("../Controllers/subcategoryController");
 const uploadPhoto = require("../middlewares/multerConfig");
-const {createSubCategoryValidator, deleteSubCategoryValidator} = require("../utils/vaildators/SubcategoryVaildators");
+const {createSubCategoryValidator, deleteSubCategoryValidator, updateSubCategoryValidator} = require("../utils/vaildators/SubcategoryVaildators");
 const router = require("express").Router();
 
 
@@ -20,6 +20,7 @@ router
 router
   .route("/:id")
   .delete(deleteSubCategoryValidator , deleteSubcategory)
+  .put(uploadPhoto.single("image") , updateSubCategoryValidator , updateSubcategory)
 
 
 
