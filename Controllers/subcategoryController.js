@@ -76,6 +76,55 @@ module.exports.createSubcategory = asyncHandler(async(req , res) => {
 
 
 // ==================================
+// @desc update subcategory
+// @route /api/v1/subcategory/:id
+// @method PUT
+// @access private (only admin)
+// ==================================
+module.exports.updateSubcategory = asyncHandler(async (req, res) => {
+  const subcategory = await SubcategoryModel.findById(req.params.id);
+  if (!subcategory) {
+    return res.status(404).json({ message: "Subcategory not found" });
+  }
+
+  // upload new image
+  let image = subcategory.image;
+  if (req.file) {
+    const { imageUrl, publicId } = await uploadImageToUploadcare(req.file);
+    image = {
+      url: imageUrl,
+      publicId: publicId,
+    };
+
+    // Delete old image
+    if (subcategory.image.publicId) {
+      await deleteImageFromUploadcare(subcategory.image.publicId);
+    }
+  }
+
+  // Update category in database
+  const updateSubCategory = await SubcategoryModel.findByIdAndUpdate(
+    req.params.id,
+    { title: req.body.title, image: image },
+    { new: true }
+  );
+
+  res
+    .status(200).json({ message: "Subcategory updated", data: updateSubCategory });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+// ==================================
 // @desc Delete subcategory by id
 // @route /api/v1/subcategory/:id
 // @method DELETE
