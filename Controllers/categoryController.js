@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const { CategoryModel } = require("../model/CategoryModel");
+const { SubcategoryModel } = require("../model/SubcategoryModel");
 const slugify = require("slugify");
 const { uploadImageToUploadcare , deleteImageFromUploadcare } = require("../utils/uploadImageToUploadcare");
 
@@ -126,16 +127,30 @@ module.exports.updateCategory = asyncHandler(async(req , res) => {
 // @method DELETE
 // @access private (only admin)
 // ==================================
-module.exports.deleteCategory = asyncHandler(async(req , res) => {
-    const category = await CategoryModel.findByIdAndDelete(req.params.id);
-    if(!category){
-        return res.status(404).json({message: "Category not found"})
+module.exports.deleteCategory = asyncHandler(async (req, res) => {
+  
+  const category = await CategoryModel.findByIdAndDelete(req.params.id);
+  if (!category) {
+    return res.status(404).json({ message: "Category not found" });
+  }
+
+  // delete image from uploadcare
+  if (category.image.publicId) {
+    await deleteImageFromUploadcare(category.image.publicId);
+  }
+
+  // get all subcategory
+  const subcategories = await SubcategoryModel.find({ category: category._id });
+
+  // delete image for sybcategory
+  for (const sub of subcategories) {
+    if (sub.image && sub.image.publicId) {
+      await deleteImageFromUploadcare(sub.image.publicId);
     }
+  }
 
-    // delete image from uploadcare
-      if (category.image.publicId) {
-        await deleteImageFromUploadcare(category.image.publicId);
-      }
+  // delete subcategories
+  await SubcategoryModel.deleteMany({ category: category._id });
 
-    res.status(200).json({message: "category deleted"})
-})
+  res.status(200).json({ message: "category deleted" });
+});

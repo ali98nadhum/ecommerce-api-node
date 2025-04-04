@@ -8,7 +8,7 @@ exports.createSubCategoryValidator = [
     .notEmpty().withMessage("title is required")
     .isLength({min: 5}).withMessage("title must be at least 5 characters")
     .isLength({max: 30}).withMessage("title must be less than 30 characters"),
-    check("id")
+    check("category")
     .isMongoId().withMessage("Invalid id")
     .notEmpty().withMessage("category is required")
     .custom((categoryId) => CategoryModel.findById(categoryId).then((category)=>{
