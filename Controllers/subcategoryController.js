@@ -5,7 +5,7 @@ const { uploadImageToUploadcare } = require("../utils/uploadImageToUploadcare");
 
 
 // ==================================
-// @desc Get All Subcategory by slug
+// @desc Get All Subcategory
 // @route /api/v1/subcategory
 // @method GET
 // @access public
@@ -18,6 +18,25 @@ module.exports.getAllSubcategory = asyncHandler(async(req , res) => {
     const totalSubcategory = await SubcategoryModel.countDocuments();
     res.json({totalSubcategory,page,data: subcategories})
 })
+
+
+
+
+// ==================================
+// @desc Get subcategory by slug
+// @route /api/v1/subcategory/:slug
+// @method GET
+// @access public
+// ==================================
+module.exports.getOneSubcategory = asyncHandler(async(req , res) => {
+    const subcategory = await SubcategoryModel.findOne({slug:req.params.slug});
+    if(!subcategory){
+        return res.status(404).json({message: "Subcategory not found"})
+    }
+})
+
+
+
 
 
 // ==================================
