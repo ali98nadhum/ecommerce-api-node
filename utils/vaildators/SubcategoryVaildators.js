@@ -39,6 +39,7 @@ exports.updateSubCategoryValidator = [
     .withMessage("title must be less than 30 characters"),
   check("id").isMongoId().withMessage("Invalid id "),
   check("category")
+    .optional()
     .isMongoId()
     .withMessage("Invalid id")
     .notEmpty()

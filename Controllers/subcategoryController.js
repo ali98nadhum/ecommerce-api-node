@@ -82,6 +82,7 @@ module.exports.createSubcategory = asyncHandler(async(req , res) => {
 // @access private (only admin)
 // ==================================
 module.exports.updateSubcategory = asyncHandler(async (req, res) => {
+
   const subcategory = await SubcategoryModel.findById(req.params.id);
   if (!subcategory) {
     return res.status(404).json({ message: "Subcategory not found" });
@@ -105,7 +106,11 @@ module.exports.updateSubcategory = asyncHandler(async (req, res) => {
   // Update category in database
   const updateSubCategory = await SubcategoryModel.findByIdAndUpdate(
     req.params.id,
-    { title: req.body.title, image: image },
+    { title: req.body.title,
+      slug:slugify(subcategory.title),
+      category: req.body.category,
+      image: image 
+    },
     { new: true }
   );
 

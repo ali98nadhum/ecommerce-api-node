@@ -102,7 +102,10 @@ module.exports.updateCategory = asyncHandler(async(req , res) => {
   // Update category in database
   const updateCategory = await CategoryModel.findByIdAndUpdate(
     req.params.id,
-    { title: req.body.title, image: image },
+    { title: req.body.title,
+      slug: slugify(category.title),
+      image: image 
+    },
     { new: true }
   );
 
