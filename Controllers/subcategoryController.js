@@ -4,6 +4,21 @@ const slugify = require("slugify");
 const { uploadImageToUploadcare } = require("../utils/uploadImageToUploadcare");
 
 
+// ==================================
+// @desc Get All Subcategory by slug
+// @route /api/v1/subcategory
+// @method GET
+// @access public
+// ==================================
+module.exports.getAllSubcategory = asyncHandler(async(req , res) => {
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 8 || 8;
+    const skip = (page - 1) * limit;
+    const subcategories = await SubcategoryModel.find().skip(skip).limit(limit)
+    const totalSubcategory = await SubcategoryModel.countDocuments();
+    res.json({totalSubcategory,page,data: subcategories})
+})
+
 
 // ==================================
 // @desc Create a new subcategory
