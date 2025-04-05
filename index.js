@@ -21,6 +21,7 @@ app.use(cors({
 // Routes
 app.use("/api/v1/category" , require("./Routes/categoryRoutes"));
 app.use("/api/v1/subcategory" , require("./Routes/subcategoryRoute"));
+app.use("/api/v1/products" , require("./Routes/productRoutes"));
 
 
 
