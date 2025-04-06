@@ -6,6 +6,26 @@ const { uploadImageToUploadcare , deleteImageFromUploadcare } = require("../util
 
 
 
+
+
+
+// ==================================
+// @desc Get All Product
+// @route /api/v1/products
+// @method GET
+// @access public
+// ==================================
+module.exports.getAllProduct = asyncHandler(async(req , res) => {
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 8 || 8;
+    const skip = (page - 1) * limit;
+    const products = await ProductModel.find().skip(skip).limit(limit)
+    const totalProducts = await ProductModel.countDocuments();
+    res.json({totalProducts,page,data: products})
+})
+
+
+
 // ==================================
 // @desc Get product by slug
 // @route /api/v1/products/:slug
