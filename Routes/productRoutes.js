@@ -1,4 +1,4 @@
-const { createProduct, getOneProduct, getAllProduct } = require("../Controllers/ProductController");
+const { createProduct, getOneProduct, getAllProduct, deleteProduct } = require("../Controllers/ProductController");
 const {createProductValidator} = require("../utils/vaildators/ProductVaildators");
 const uploadPhoto = require("../middlewares/multerConfig");
 const router = require("express").Router();
@@ -12,6 +12,12 @@ router
 router
   .route("/:slug")
   .get(getOneProduct)
+
+
+
+router
+.route("/:id")
+.get(deleteProduct);
 
 
 
