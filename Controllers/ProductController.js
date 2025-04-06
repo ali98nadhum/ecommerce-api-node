@@ -104,8 +104,8 @@ module.exports.deleteProduct = asyncHandler(async (req, res) => {
   }
 
   // delete image from uploadcare
-  if (product.image.publicId) {
-    await deleteImageFromUploadcare(product.image.publicId);
+  if (product.imageCover.publicId) {
+    await deleteImageFromUploadcare(product.imageCover.publicId);
   }
 
   res.status(200).json({ message: "product deleted" });

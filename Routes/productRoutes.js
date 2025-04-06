@@ -17,7 +17,7 @@ router
 
 router
 .route("/:id")
-.get(deleteProduct);
+.delete(deleteProduct);
 
 
 
