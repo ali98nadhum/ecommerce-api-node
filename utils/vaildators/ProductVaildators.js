@@ -64,3 +64,12 @@ exports.createProductValidator = [
 
   VaildatorMiddleware,
 ];
+
+
+
+
+exports.deleteProductValidator = [
+    check("id")
+    .isMongoId().withMessage("Invalid id product"),
+    VaildatorMiddleware,
+]
