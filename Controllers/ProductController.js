@@ -19,8 +19,17 @@ module.exports.getAllProduct = asyncHandler(async(req , res) => {
     const page = req.query.page * 1 || 1;
     const limit = req.query.limit * 8 || 8;
     const skip = (page - 1) * limit;
-    const products = await ProductModel.find().skip(skip).limit(limit)
-    const totalProducts = await ProductModel.countDocuments();
+
+    const search = req.query.search || '';
+
+    const queryObj = {};
+
+    if (search) {
+        queryObj.title = { $regex: search, $options: 'i' };
+    }
+
+    const products = await ProductModel.find(queryObj).skip(skip).limit(limit)
+    const totalProducts = await ProductModel.countDocuments(queryObj);
     res.json({totalProducts,page,data: products})
 })
 
