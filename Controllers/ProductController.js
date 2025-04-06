@@ -6,6 +6,25 @@ const { uploadImageToUploadcare , deleteImageFromUploadcare } = require("../util
 
 
 
+// ==================================
+// @desc Get product by slug
+// @route /api/v1/products/:slug
+// @method GET
+// @access public
+// ==================================
+module.exports.getOneProduct = asyncHandler(async(req , res) => {
+    const product = await ProductModel.findOne({slug: req.params.slug});
+    if(!product){
+        return res.status(404).json({message: "Product not found"})
+    }
+
+    res.status(200).json({data: product})
+})
+
+
+
+
+
 
 
 
