@@ -88,3 +88,25 @@ module.exports.createProduct = asyncHandler(async(req , res) => {
 
     res.status(201).json({message: 'Product saved successfully' , data:newProduct})
 })
+
+
+
+// ==================================
+// @desc Delete product
+// @route /api/v1/products/:id
+// @method DELETE
+// @access private (only admin)
+// ==================================
+module.exports.deleteProduct = asyncHandler(async (req, res) => {
+  const product = await ProductModel.findByIdAndDelete(req.params.id);
+  if (!product) {
+    return res.status(404).json({ message: "product not found" });
+  }
+
+  // delete image from uploadcare
+  if (product.image.publicId) {
+    await deleteImageFromUploadcare(product.image.publicId);
+  }
+
+  res.status(200).json({ message: "product deleted" });
+});
