@@ -91,6 +91,65 @@ module.exports.createProduct = asyncHandler(async(req , res) => {
 
 
 
+
+
+// ==================================
+// @desc Update a product
+// @route /api/v1/products/:id
+// @method PUT
+// @access private (only admin)
+// ==================================
+module.exports.updateProduct = asyncHandler(async(req , res) => {
+    const product = await ProductModel.findById(req.params.id);
+    if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+    }
+
+    let imageCover = product.imageCover;
+    if(req.file){
+        const {imageUrl , publicId} = await uploadImageToUploadcare(req.file);
+        imageCover = {url: imageUrl, publicId: publicId};
+
+        if(product.imageCover.publicId){
+            await deleteImageFromUploadcare(product.imageCover.publicId)
+        }
+    }
+
+    const updateProduct = await ProductModel.findByIdAndUpdate(
+        req.params.id,
+        {
+            title: req.body.title,
+            slug: slugify(product.title),
+            description: req.body.description,
+            price: req.body.price,
+            priceAfterDiscount: req.body.priceAfterDiscount,
+            quantity: req.body.quantity,
+            isAvailable: req.body.isAvailable,
+            category: req.body.category,
+            subcategory: req.body.subcategory,
+            imageCover: imageCover
+        },
+        {new:true}
+    )
+
+    res.status(200).json({ message: "Product updated", data: updateProduct });
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ==================================
 // @desc Delete product
 // @route /api/v1/products/:id
