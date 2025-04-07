@@ -28,7 +28,7 @@ module.exports.getAllCategories = asyncHandler(async(req , res) => {
 // @access public
 // ==================================
 module.exports.getOneCateogry = asyncHandler(async(req , res) => {
-    const category = await CategoryModel.findOne({slug:req.params.slug}).populate("subcategories");
+    const category = await CategoryModel.findOne({slug:req.params.slug}).populate("subcategories products");
     if(!category){
         return res.status(404).json({message: "Category not found"})
     }

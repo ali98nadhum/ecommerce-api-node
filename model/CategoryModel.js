@@ -32,6 +32,13 @@ CategorySchema.virtual("subcategories", {
 });
 
 
+CategorySchema.virtual("products", {
+  ref: "ProductModel", 
+  localField: "_id", 
+  foreignField: "category",
+});
+
+
 
 const CategoryModel = mongoose.model("CategoryModel", CategorySchema);
 
