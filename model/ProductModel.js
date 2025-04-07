@@ -28,7 +28,6 @@ const ProductSchema = new mongoose.Schema(
       required: true,
       trim: true,
       min: [0, "Price must be greater than or equal to 0"],
-      set: (value) => Math.round(value),
     },
 
     priceAfterDiscount: {
