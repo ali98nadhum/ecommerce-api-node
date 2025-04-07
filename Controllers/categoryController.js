@@ -13,7 +13,7 @@ const { uploadImageToUploadcare , deleteImageFromUploadcare } = require("../util
 // @access public
 // ==================================
 module.exports.getAllCategories = asyncHandler(async(req , res) => {
-    const categories = await CategoryModel.find({});
+    const categories = await CategoryModel.find({}).populate("subcategories products");
     res.status(200).json({data:categories})
 })
 
