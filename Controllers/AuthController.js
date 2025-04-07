@@ -1,0 +1,27 @@
+const asyncHandler = require("express-async-handler");
+const { UserModel } = require("../model/UserModel");
+
+
+
+// ==================================
+// @desc Register new user
+// @route /api/v1/auth/register
+// @method POST 
+// @access public
+// ==================================
+module.exports.register = asyncHandler(async(req , res) => {
+
+    const {name , username , password , email , phone} = req.body;
+
+    const newUser = new UserModel({
+        name,
+        username,
+        password,
+        email,
+        phone
+    });
+
+    await newUser.save();
+
+    res.status(201).json({message: "Registration successful"})
+})
