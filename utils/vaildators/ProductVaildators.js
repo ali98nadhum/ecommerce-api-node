@@ -66,6 +66,82 @@ exports.createProductValidator = [
 ];
 
 
+exports.updateProductValidator = [
+  check("title")
+    .optional()
+    .isLength({ min: 3 })
+    .withMessage("title must be at least 3 characters")
+    .isLength({ max: 100 })
+    .withMessage("title must be less than 100 characters"),
+
+  check("description")
+    .optional()
+    .isLength({ min: 20 })
+    .withMessage("title must be at least 20 characters")
+    .isLength({ max: 500 })
+    .withMessage("title must be less than 500 characters"),
+
+  check("price")
+    .optional()
+    .isNumeric()
+    .withMessage("price must be a number")
+    .custom((value) => value >= 0)
+    .withMessage("Price must be a positive number"),
+
+  check("priceAfterDiscount")
+    .optional()
+    .isNumeric()
+    .withMessage("priceAfterDiscount must be a number")
+    .custom((value, { req }) => {
+      if (req.body.price && parseInt(value) >= parseInt(req.body.price)) {
+        return Promise.reject(
+          new Error("priceAfterDiscount must be lower than price")
+        );
+      }
+      return true;
+    }),
+
+  check("isAvailable")
+    .optional()
+    .isBoolean()
+    .withMessage("isAvailable must be a boolean")
+    .toBoolean(),
+
+  check("quantity")
+    .optional()
+    .isNumeric()
+    .withMessage("quantity must be a number")
+    .custom((value) => value >= 0)
+    .withMessage("quantity must be a positive number"),
+
+  check("category")
+    .optional()
+    .isMongoId()
+    .withMessage("Invalid id category")
+    .custom((categoryId) =>
+      CategoryModel.findById(categoryId).then((Category) => {
+        if (!Category) {
+          return Promise.reject(new Error("Category not found"));
+        }
+      })
+    ),
+
+  check("subcategory")
+    .optional()
+    .isMongoId()
+    .withMessage("Invalid id subcategory")
+    .custom((subcategoryId) =>
+      SubcategoryModel.findById(subcategoryId).then((subCategory) => {
+        if (!subCategory) {
+          return Promise.reject(new Error("subCategory not found"));
+        }
+      })
+    ),
+
+  VaildatorMiddleware,
+];
+
+
 
 
 exports.deleteProductValidator = [
