@@ -1,5 +1,5 @@
-const { createProduct, getOneProduct, getAllProduct, deleteProduct } = require("../Controllers/ProductController");
-const {createProductValidator} = require("../utils/vaildators/ProductVaildators");
+const { createProduct, getOneProduct, getAllProduct, deleteProduct, updateProduct } = require("../Controllers/ProductController");
+const {createProductValidator, updateProductValidator, deleteProductValidator} = require("../utils/vaildators/ProductVaildators");
 const uploadPhoto = require("../middlewares/multerConfig");
 const router = require("express").Router();
 
@@ -17,7 +17,8 @@ router
 
 router
 .route("/:id")
-.delete(deleteProduct);
+.delete(deleteProductValidator,deleteProduct)
+.put(uploadPhoto.single("image") , updateProductValidator , updateProduct)
 
 
 
