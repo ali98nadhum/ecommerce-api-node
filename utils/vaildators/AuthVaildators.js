@@ -43,7 +43,15 @@ exports.registerValidator = [
       }
     }),
 
-  check("phone").isMobilePhone(["ar-IQ"]).withMessage("invalid phone number"),
+  check("phone")
+    .isMobilePhone(["ar-IQ"])
+    .withMessage("invalid phone number")
+    .custom(async (val) => {
+      const existingPhone = await UserModel.findOne({ phone: val });
+      if (existingPhone) {
+        throw new Error("Phone number already exists");
+      }
+    }),
 
   VaildatorMiddleware,
 ];
