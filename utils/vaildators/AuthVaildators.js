@@ -55,3 +55,15 @@ exports.registerValidator = [
 
   VaildatorMiddleware,
 ];
+
+
+
+exports.loginValidator = [
+  check("email")
+  .notEmpty().withMessage("email is required")
+  .isEmail().withMessage("Invalid email"),
+  check("password")
+  .notEmpty().withMessage("password is required")
+  .isLength({ min: 8 }).withMessage("Password must be at least 8 characters"),
+  VaildatorMiddleware,
+]
