@@ -1,0 +1,49 @@
+const { check } = require("express-validator");
+const VaildatorMiddleware = require("../../middlewares/vaildatorMiddleware");
+const { UserModel } = require("../../model/UserModel");
+
+exports.registerValidator = [
+  check("name")
+    .notEmpty()
+    .withMessage("name is required")
+    .isLength({ min: 6 })
+    .withMessage("name must be at least 6 characters")
+    .isLength({ max: 25 })
+    .withMessage("name must be less than 25 characters"),
+
+  check("username")
+    .notEmpty()
+    .withMessage("username is required")
+    .isLength({ min: 3 })
+    .withMessage("username must be at least 3 characters")
+    .isLength({ max: 20 })
+    .withMessage("username must be less than 20 characters")
+    .custom(async (val) => {
+      const existingUsername = await UserModel.findOne({ username: val });
+      if (existingUsername) {
+        throw new Error("username already exists");
+      }
+    }),
+
+  check("password")
+    .notEmpty()
+    .withMessage("password is required")
+    .isLength({ min: 8 })
+    .withMessage("password must be at least 8 characters"),
+
+  check("email")
+    .notEmpty()
+    .withMessage("email is required")
+    .isEmail()
+    .withMessage("invalid email format")
+    .custom(async (val) => {
+      const existingUser = await UserModel.findOne({ email: val });
+      if (existingUser) {
+        throw new Error("Email already exists");
+      }
+    }),
+
+  check("phone").isMobilePhone(["ar-IQ"]).withMessage("invalid phone number"),
+
+  VaildatorMiddleware,
+];
