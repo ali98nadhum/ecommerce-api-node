@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const { UserModel } = require("../model/UserModel");
+const { hashPassword } = require("../middlewares/hashPassword");
 
 
 
@@ -13,10 +14,13 @@ module.exports.register = asyncHandler(async(req , res) => {
 
     const {name , username , password , email , phone} = req.body;
 
+    // hash password
+    const hashedPassword = await hashPassword(password);
+
     const newUser = new UserModel({
         name,
         username,
-        password,
+        password:hashedPassword,
         email,
         phone
     });
