@@ -91,3 +91,34 @@ module.exports.login = asyncHandler(async(req, res) => {
 
     res.status(200).json({message:`login success hi ${user.name}` , token: token});
 })
+
+
+
+// ==================================
+// @desc verfiy email
+// @route /api/v1/auth/verify-email/:id/:verificationToken
+// @method GET
+// @access private (only user register)
+// ==================================
+module.exports.verifyEmail = asyncHandler(async(req , res) => {
+  const {id , verificationToken} = req.params;
+  const user = await UserModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "user not found" });
+    }
+
+    if(user.verificationToken === null){
+      return res.status(404).json({message: "You cannt verify your account"})
+    }
+
+    if(user.verificationToken !== verificationToken){
+      return res.status(400).json({message: "Invaild verification link"})
+    }
+
+    user.isVerifird = true;
+    user.verificationToken = null;
+
+    await user.save();
+
+    res.status(200).json({message: "Email has been verifird , plase login to your account"})
+})

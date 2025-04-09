@@ -32,6 +32,11 @@ const UserSchema = new mongoose.Schema({
     minlength: [8, "password must be at least 8 characters"],
   },
 
+  isVerifird:{
+    type: Boolean,
+    default: false,
+  },
+
   role: {
     type: String,
     enum: ["superAdmin", "admin", "user"],
