@@ -22,7 +22,7 @@ module.exports.register = asyncHandler(async(req , res) => {
     // hash password
     const hashedPassword = await hashPassword(password);
 
-    const verificationTokenExpires = new Date(Date.now() + 10 * 1000);
+    const verificationTokenExpires = new Date(Date.now() + 10 * 60 * 1000);
 
     const newUser = new UserModel({
         name,
@@ -41,7 +41,7 @@ module.exports.register = asyncHandler(async(req , res) => {
   try {
     await sendEmail({
       email: newUser.email,
-      subject: "كود التفعيل الخاص بك صالح لمده 10 دقائق فقط",
+      subject: "رابط التفعيل الخاص بك صالح لمده 10 دقائق فقط",
       message: verifyEmailTemplate(newUser.email , link)
     })
   } catch (error) {
@@ -68,32 +68,50 @@ module.exports.register = asyncHandler(async(req , res) => {
 // @method POST 
 // @access public
 // ==================================
-module.exports.login = asyncHandler(async(req, res) => {
-    const {email , password} = req.body;
+module.exports.login = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
 
-    // Check if user exists
-  const user = await UserModel.findOne({email});
-  if(!user){
-    return res.status(400).json({message: "Invalid email or password"})
+  // Check if user exists
+  const user = await UserModel.findOne({ email });
+  if (!user) {
+    return res.status(400).json({ message: "Invalid email or password" });
   }
 
-    // Check if password matches
-    const isPasswordMatch = await bcrypt.compare(password , user.password);
-    if(!isPasswordMatch){
-      return res.status(400).json({message: "Invalid email or password"})
+  // Check if password matches
+  const isPasswordMatch = await bcrypt.compare(password, user.password);
+  if (!isPasswordMatch) {
+    return res.status(400).json({ message: "Invalid email or password" });
+  }
+
+  // check for Verifird account
+  if (!user.isVerifird) {
+    let verificationToken = user.verificationToken;
+    if (!verificationToken || user.verificationTokenExpires < new Date()) {
+      verificationToken = randomBytes(32).toString("hex");
+      user.verificationToken = verificationToken;
+      user.verificationTokenExpires = new Date(Date.now() + 10 * 60 * 1000);
+      await user.save();
     }
 
-    // Generate a JWT token for a user.
-    const token = generateToken(
-      user.id,
-      user.name,
-      user.username,
-      user.role
-    );
+    const link = `${process.env.DOMAIN}/api/v1/auth/verify-email/${user.id}/${user.verificationToken}`;
+    await sendEmail({
+      email: user.email,
+      subject: "رابط التفعيل الخاص بك صالح لمده 10 دقائق فقط",
+      message: verifyEmailTemplate(user.email, link),
+    });
 
+    return res.status(403).json({
+      message: "حسابك غير مفعل. تم إرسال رابط تفعيل جديد إلى بريدك الإلكتروني.",
+    });
+  }
 
-    res.status(200).json({message:`login success hi ${user.name}` , token: token});
-})
+  // Generate a JWT token for a user.
+  const token = generateToken(user.id, user.name, user.username, user.role);
+
+  res
+    .status(200)
+    .json({ message: `login success hi ${user.name}`, token: token });
+});
 
 
 
@@ -103,27 +121,31 @@ module.exports.login = asyncHandler(async(req, res) => {
 // @method GET
 // @access private (only user register)
 // ==================================
-module.exports.verifyEmail = asyncHandler(async(req , res) => {
-  const {id , verificationToken} = req.params;
+module.exports.verifyEmail = asyncHandler(async (req, res) => {
+  const { id, verificationToken } = req.params;
+
   const user = await UserModel.findById(id);
-    if (!user) {
-      return res.status(404).json({ message: "user not found" });
-    }
+  if (!user) {
+    return res.status(404).json({ message: "user not found" });
+  }
 
-    if(user.verificationToken === null || user.verificationTokenExpires < new Date()){
-      user.verificationToken = null;
-      await user.save();
-      return res.status(404).json({message: "Your link is expires"})
-    }
+  if (user.verificationToken === null || user.verificationTokenExpires < new Date() ) {
 
-    if(user.verificationToken !== verificationToken){
-      return res.status(400).json({message: "Invaild verification link"})
-    }
-
-    user.isVerifird = true;
     user.verificationToken = null;
-
     await user.save();
+    return res.status(404).json({ message: "Your link is expires" });
+  }
 
-    res.status(200).json({message: "Email has been verifird , plase login to your account"})
-})
+  if (user.verificationToken !== verificationToken) {
+    return res.status(400).json({ message: "Invaild verification link" });
+  }
+
+  user.isVerifird = true;
+  user.verificationToken = null;
+
+  await user.save();
+
+  res
+    .status(200)
+    .json({ message: "Email has been verifird , plase login to your account" });
+});
