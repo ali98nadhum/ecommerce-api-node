@@ -1,4 +1,4 @@
-const verifyCodeTemplate = (email, link) => {
+const verifyEmailTemplate = (email, link) => {
     return `
       <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; padding: 30px;">
         <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 12px; padding: 40px 30px; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);">
@@ -32,5 +32,5 @@ const verifyCodeTemplate = (email, link) => {
     `;
   };
   
-  module.exports = verifyCodeTemplate;
+  module.exports = verifyEmailTemplate;
   

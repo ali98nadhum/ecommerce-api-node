@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 const { generateToken } = require("../utils/token/generateToken");
 const randomBytes = require('randombytes');
 const sendEmail = require("../utils/emails/sendEmail");
-const verifyCodeTemplate = require("../utils/emailTemplates/verifyCodeTemplate");
+const verifyEmailTemplate = require("../utils/emailTemplates/verifyCodeTemplate");
 
 
 
@@ -22,13 +22,16 @@ module.exports.register = asyncHandler(async(req , res) => {
     // hash password
     const hashedPassword = await hashPassword(password);
 
+    const verificationTokenExpires = new Date(Date.now() + 10 * 1000);
+
     const newUser = new UserModel({
         name,
         username,
         password:hashedPassword,
         email,
         phone,
-        verificationToken: randomBytes(32).toString("hex")
+        verificationToken: randomBytes(32).toString("hex"),
+        verificationTokenExpires: verificationTokenExpires
     });
 
     await newUser.save();
@@ -39,7 +42,7 @@ module.exports.register = asyncHandler(async(req , res) => {
     await sendEmail({
       email: newUser.email,
       subject: "كود التفعيل الخاص بك صالح لمده 10 دقائق فقط",
-      message: verifyCodeTemplate(newUser.email , link)
+      message: verifyEmailTemplate(newUser.email , link)
     })
   } catch (error) {
     console.log(error);
@@ -107,8 +110,10 @@ module.exports.verifyEmail = asyncHandler(async(req , res) => {
       return res.status(404).json({ message: "user not found" });
     }
 
-    if(user.verificationToken === null){
-      return res.status(404).json({message: "You cannt verify your account"})
+    if(user.verificationToken === null || user.verificationTokenExpires < new Date()){
+      user.verificationToken = null;
+      await user.save();
+      return res.status(404).json({message: "Your link is expires"})
     }
 
     if(user.verificationToken !== verificationToken){

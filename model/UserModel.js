@@ -46,6 +46,8 @@ const UserSchema = new mongoose.Schema({
   phone: String,
 
   verificationToken: String,
+
+  verificationTokenExpires: Date,
 });
 
 const UserModel = mongoose.model("UserModel", UserSchema);
