@@ -3,6 +3,9 @@ const { UserModel } = require("../model/UserModel");
 const { hashPassword } = require("../middlewares/hashPassword");
 const bcrypt = require("bcryptjs");
 const { generateToken } = require("../utils/token/generateToken");
+const randomBytes = require('randombytes');
+const sendEmail = require("../utils/emails/sendEmail");
+const verifyCodeTemplate = require("../utils/emailTemplates/verifyCodeTemplate");
 
 
 
@@ -24,10 +27,24 @@ module.exports.register = asyncHandler(async(req , res) => {
         username,
         password:hashedPassword,
         email,
-        phone
+        phone,
+        verificationToken: randomBytes(32).toString("hex")
     });
 
     await newUser.save();
+    const link = `${process.env.DOMAIN}/api/v1/auth/verify-email/${newUser.id}/${newUser.verificationToken}`;
+
+     // send email to verified user
+  try {
+    await sendEmail({
+      email: newUser.email,
+      subject: "كود التفعيل الخاص بك صالح لمده 10 دقائق فقط",
+      message: verifyCodeTemplate(newUser.email , link)
+    })
+  } catch (error) {
+    console.log(error);
+    
+  }
 
     res.status(201).json({message: "Registration successful"})
 })
