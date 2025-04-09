@@ -2,25 +2,41 @@ const { createProduct, getOneProduct, getAllProduct, deleteProduct, updateProduc
 const {createProductValidator, updateProductValidator, deleteProductValidator} = require("../utils/vaildators/ProductVaildators");
 const uploadPhoto = require("../middlewares/multerConfig");
 const router = require("express").Router();
-
-router
-  .route("/")
-  .post(uploadPhoto.single("image"),createProductValidator , createProduct)
-  .get(getAllProduct)
+const AuthService = require("../utils/token/AuthService");
 
 
-router
-  .route("/:slug")
-  .get(getOneProduct)
+
+
 
 
 
 router
-.route("/:id")
-.delete(deleteProductValidator,deleteProduct)
-.put(uploadPhoto.single("image") , updateProductValidator , updateProduct)
+  .route("/")
+  .post(
+    AuthService.protect,
+    AuthService.allowedTo("superAdmin", "admin"),
+    uploadPhoto.single("image"),
+    createProductValidator,
+    createProduct
+  )
+  .get(getAllProduct);
 
+router.route("/:slug").get(getOneProduct);
 
-
+router
+  .route("/:id")
+  .delete(
+    AuthService.protect,
+    AuthService.allowedTo("superAdmin", "admin"),
+    deleteProductValidator,
+    deleteProduct
+  )
+  .put(
+    AuthService.protect,
+    AuthService.allowedTo("superAdmin", "admin"),
+    uploadPhoto.single("image"),
+    updateProductValidator,
+    updateProduct
+  );
 
 module.exports = router;
