@@ -89,7 +89,7 @@ exports.updateUserRoleValidator = [
 ]
 
 
-exports.updateUserRoleValidator = [
+exports.changePasswordValidator = [
   check("id").isMongoId().withMessage("Invalid user id"),
   check("oldPassword")
     .notEmpty()

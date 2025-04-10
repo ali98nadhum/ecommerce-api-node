@@ -1,5 +1,5 @@
 const { register, login, verifyEmail, changePassword } = require("../Controllers/AuthController");
-const { registerValidator, loginValidator } = require("../utils/vaildators/AuthVaildators");
+const { registerValidator, loginValidator, changePasswordValidator } = require("../utils/vaildators/AuthVaildators");
 
 const router = require("express").Router();
 
@@ -21,7 +21,7 @@ router
 
  router
  .route("/change-Password/:id")
- .post(changePassword)
+ .post(changePasswordValidator,changePassword)
 
 
 
