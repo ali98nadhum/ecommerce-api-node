@@ -17,6 +17,23 @@ module.exports.getAllBrands = asyncHandler(async(req , res) => {
 
 
 
+// ==================================
+// @desc Get brand by slug
+// @route /api/v1/brand/:slug
+// @method GET
+// @access public
+// ==================================
+module.exports.getOneBrand = asyncHandler(async(req , res) => {
+    const brand = await BrandModel.findOne({slug:req.params.slug})
+    if(!brand){
+        return res.status(404).json({message: "Brand not found"})
+    }
+
+    res.status(200).json({data: brand})
+})
+
+
+
 
 // ==================================
 // @desc Create a new brand
