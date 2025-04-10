@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const { BrandModel } = require("../model/BrandModel");
 const { uploadImageToUploadcare , deleteImageFromUploadcare } = require("../utils/uploadImageToUploadcare");
+const { default: slugify } = require("slugify");
 
 
 
@@ -23,6 +24,7 @@ module.exports.createBrand = asyncHandler(async(req , res) => {
     // create brand
     const newBrand = new BrandModel({
         title,
+        slug: slugify(title),
         image: {url:imageUrl , publicId}
     });
 

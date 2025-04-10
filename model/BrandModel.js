@@ -10,6 +10,11 @@ const BrandSchema = new mongoose.Schema(
       maxlength: 20,
     },
 
+    slug: {
+        type: String,
+        lowercase: true,
+      },
+
     image: {
       url: { type: String },
       publicId: { type: String },
