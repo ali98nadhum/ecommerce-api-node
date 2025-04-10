@@ -75,3 +75,15 @@ exports.deleteAccountValidator = [
   .isMongoId().withMessage("Invalid user id"),
   VaildatorMiddleware,
 ]
+
+
+exports.updateUserRoleValidator = [
+  check("id")
+  .isMongoId().withMessage("Invalid user id"),
+  check("role")
+  .notEmpty()
+  .withMessage("Role is required")
+  .isIn(["user", "admin", "superAdmin"])
+  .withMessage("Invalid role, must be one of: user, admin, superAdmin"),
+  VaildatorMiddleware,
+]

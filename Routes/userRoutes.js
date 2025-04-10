@@ -1,5 +1,5 @@
 const { deleteAccount, updateUserRole } = require("../Controllers/UserController");
-const {deleteAccountValidator,} = require("../utils/vaildators/AuthVaildators");
+const {deleteAccountValidator, updateUserRoleValidator,} = require("../utils/vaildators/AuthVaildators");
 const AuthService = require("../utils/token/AuthService");
 
 const router = require("express").Router();
@@ -14,6 +14,7 @@ router
   .put(
     AuthService.protect,
     AuthService.allowedTo("superAdmin"),
+    updateUserRoleValidator,
     updateUserRole
   )
 
