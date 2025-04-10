@@ -149,3 +149,37 @@ module.exports.verifyEmail = asyncHandler(async (req, res) => {
     .status(200)
     .json({ message: "Email has been verifird , plase login to your account" });
 });
+
+
+
+// ==================================
+// @desc change Password 
+// @route /api/v1/auth/change-Password /:id
+// @method POST
+// @access private (only user loged)
+// ==================================
+module.exports.changePassword  = asyncHandler(async(req , res) => {
+  const {oldPassword , newPassword} = req.body;
+
+  if (req.user.id !== req.params.id) {
+    return res.status(403).json({ message: "You can only change your own password" });
+  }
+
+  const user = await UserModel.findById(req.user.id);
+  if (!user) {
+      return res.status(404).json({ message: "User not found" });
+  }
+
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) {
+      return res.status(400).json({ message: "Old password is incorrect" });
+  }
+
+  const hashedPassword = await hashPassword(newPassword);
+
+  user.password = hashedPassword;
+  await user.save();
+
+  res.status(200).json({message: "Password changed successfully"})
+
+})
