@@ -15,3 +15,10 @@ exports.createBrandValidator = [
 
   VaildatorMiddleware,
 ];
+
+
+
+exports.deleteBrandValidator = [
+  check("id").isMongoId().withMessage("Invalid id category"),
+  VaildatorMiddleware,
+];
