@@ -3,6 +3,27 @@ const { UserModel } = require("../model/UserModel");
 
 
 // ==================================
+// @desc update user role
+// @route /api/v1/user/:id
+// @method PUT
+// @access private (only super admin)
+// ==================================
+module.exports.updateUserRole = asyncHandler(async (req, res) => {
+  const user = await UserModel.findByIdAndUpdate(
+    req.params.id,
+    { role: req.body.role },
+    { new: true }
+  );
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  res.status(200).json({ message: "User role is updated" });
+});
+
+
+// ==================================
 // @desc delete user account
 // @route /api/v1/user/:id
 // @method POST
