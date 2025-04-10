@@ -1,5 +1,5 @@
 const uploadPhoto = require("../middlewares/multerConfig");
-const { createBrand } = require("../Controllers/BrandController");
+const { createBrand, getAllBrands } = require("../Controllers/BrandController");
 const AuthService = require("../utils/token/AuthService");
 const { createBrandValidator } = require("../utils/vaildators/brandVaildators");
 const router = require("express").Router();
@@ -13,5 +13,6 @@ router
     createBrandValidator,
     createBrand,
   )
+  .get(getAllBrands)
 
 module.exports = router;
