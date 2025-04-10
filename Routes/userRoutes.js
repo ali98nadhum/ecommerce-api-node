@@ -8,7 +8,6 @@ router
   .route("/:id")
   .post(
     AuthService.protect,
-    AuthService.allowedTo("superAdmin", "admin"),
     deleteAccountValidator,
     deleteAccount
   );

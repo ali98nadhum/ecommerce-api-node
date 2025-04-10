@@ -23,6 +23,7 @@ app.use("/api/v1/category" , require("./Routes/categoryRoutes"));
 app.use("/api/v1/subcategory" , require("./Routes/subcategoryRoute"));
 app.use("/api/v1/products" , require("./Routes/productRoutes"));
 app.use("/api/v1/auth" , require("./Routes/authRoutes"));
+app.use("/api/v1/user" , require("./Routes/userRoutes"));
 
 
 
