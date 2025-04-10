@@ -4,6 +4,18 @@ const { uploadImageToUploadcare , deleteImageFromUploadcare } = require("../util
 const { default: slugify } = require("slugify");
 
 
+// ==================================
+// @desc Get All brands
+// @route /api/v1/brand
+// @method GET
+// @access public
+// ==================================
+module.exports.getAllBrands = asyncHandler(async(req , res) => {
+    const brands = await BrandModel.find({})
+    res.status(200).json({data: brands})
+})
+
+
 
 
 // ==================================
