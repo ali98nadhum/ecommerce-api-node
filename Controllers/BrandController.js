@@ -61,3 +61,27 @@ module.exports.createBrand = asyncHandler(async(req , res) => {
 
     res.status(201).json({message: "Brand created" , data: newBrand})
 })
+
+
+
+
+// ==================================
+// @desc Delete brand
+// @route /api/v1/brand/:id
+// @method DELETE
+// @access private (only admin)
+// ==================================
+module.exports.deleteBrand = asyncHandler(async(req , res) => {
+
+    const brand = await BrandModel.findByIdAndDelete(req.params.id);
+    if(!brand){
+        return res.status(404).json({message: "brand not found"})
+    }
+
+    // delete image
+    if(brand.image.publicId){
+        await deleteImageFromUploadcare(brand.image.publicId);
+    }
+
+    res.status(200).json({message: "Brand deleted"})
+})
