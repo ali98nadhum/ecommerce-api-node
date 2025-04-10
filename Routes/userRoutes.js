@@ -1,4 +1,4 @@
-const { deleteAccount } = require("../Controllers/UserController");
+const { deleteAccount, updateUserRole } = require("../Controllers/UserController");
 const {deleteAccountValidator,} = require("../utils/vaildators/AuthVaildators");
 const AuthService = require("../utils/token/AuthService");
 
@@ -10,6 +10,11 @@ router
     AuthService.protect,
     deleteAccountValidator,
     deleteAccount
-  );
+  )
+  .put(
+    AuthService.protect,
+    AuthService.allowedTo("superAdmin"),
+    updateUserRole
+  )
 
 module.exports = router;
