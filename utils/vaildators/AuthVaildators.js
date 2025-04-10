@@ -93,12 +93,12 @@ exports.changePasswordValidator = [
   check("id").isMongoId().withMessage("Invalid user id"),
   check("oldPassword")
     .notEmpty()
-    .withMessage("password is required")
+    .withMessage("old password is required")
     .isLength({ min: 8 })
     .withMessage("password must be at least 8 characters"),
   check("newPassword")
     .notEmpty()
-    .withMessage("password is required")
+    .withMessage("new password is required")
     .isLength({ min: 8 })
     .withMessage("password must be at least 8 characters"),
   VaildatorMiddleware,
