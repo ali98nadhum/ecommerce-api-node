@@ -19,6 +19,6 @@ exports.createBrandValidator = [
 
 
 exports.deleteBrandValidator = [
-  check("id").isMongoId().withMessage("Invalid id category"),
+  check("id").isMongoId().withMessage("Invalid id brand"),
   VaildatorMiddleware,
 ];
