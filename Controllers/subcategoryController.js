@@ -107,7 +107,7 @@ module.exports.updateSubcategory = asyncHandler(async (req, res) => {
   const updateSubCategory = await SubcategoryModel.findByIdAndUpdate(
     req.params.id,
     { title: req.body.title,
-      slug:slugify(subcategory.title),
+      slug:slugify(req.body.title),
       category: req.body.category,
       image: image 
     },

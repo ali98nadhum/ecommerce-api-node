@@ -103,7 +103,7 @@ module.exports.updateCategory = asyncHandler(async(req , res) => {
   const updateCategory = await CategoryModel.findByIdAndUpdate(
     req.params.id,
     { title: req.body.title,
-      slug: slugify(category.title),
+      slug: slugify(req.body.title),
       image: image 
     },
     { new: true }

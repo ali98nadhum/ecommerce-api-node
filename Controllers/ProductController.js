@@ -119,7 +119,7 @@ module.exports.updateProduct = asyncHandler(async(req , res) => {
         req.params.id,
         {
             title: req.body.title,
-            slug: slugify(product.title),
+            slug: slugify(req.body.title),
             description: req.body.description,
             price: req.body.price,
             priceAfterDiscount: req.body.priceAfterDiscount,
