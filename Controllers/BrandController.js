@@ -87,15 +87,18 @@ module.exports.updateBrand = asyncHandler(async (req, res) => {
     };
 
     // Delete old image
-    if (category.image.publicId) {
-      await deleteImageFromUploadcare(category.image.publicId);
+    if (brand.image.publicId) {
+      await deleteImageFromUploadcare(brand.image.publicId);
     }
   }
 
   // update brand
   const newBrand = await BrandModel.findByIdAndUpdate(
     req.params.id,
-    { title: req.body.title, slug: slugify(category.title), image: image },
+    { title: req.body.title, 
+      slug: slugify(req.body.title), 
+      image: image 
+    },
     { new: true }
   );
 

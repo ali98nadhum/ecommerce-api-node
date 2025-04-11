@@ -27,5 +27,12 @@ exports.updateBrandValidator = [
 
 exports.deleteBrandValidator = [
   check("id").isMongoId().withMessage("Invalid id brand"),
+  check("title")
+    .optional()
+    .isLength({ min: 3 })
+    .withMessage("title must be at least 3 characters")
+    .isLength({ max: 20 })
+    .withMessage("title must be less than 20 characters"),
+
   VaildatorMiddleware,
 ];

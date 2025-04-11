@@ -32,6 +32,7 @@ router
   .put(
     AuthService.protect,
     AuthService.allowedTo("superAdmin" , "admin"),
+    uploadPhoto.single("image"),
     updateBrandValidator,
     updateBrand
   )
