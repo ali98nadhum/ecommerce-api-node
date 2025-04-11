@@ -65,6 +65,46 @@ module.exports.createBrand = asyncHandler(async(req , res) => {
 
 
 
+
+// ==================================
+// @desc update brand
+// @route /api/v1/brand/:id
+// @method PUT
+// @access private (only admin)
+// ==================================
+module.exports.updateBrand = asyncHandler(async (req, res) => {
+  const brand = await BrandModel.findById(req.params.id);
+  if (!brand) {
+    return res.status(404).json({ message: "Brand not found" });
+  }
+
+  let image = brand.image;
+  if (req.file) {
+    const { imageUrl, publicId } = await uploadImageToUploadcare(req.file);
+    image = {
+      url: imageUrl,
+      publicId: publicId,
+    };
+
+    // Delete old image
+    if (category.image.publicId) {
+      await deleteImageFromUploadcare(category.image.publicId);
+    }
+  }
+
+  // update brand
+  const newBrand = await BrandModel.findByIdAndUpdate(
+    req.params.id,
+    { title: req.body.title, slug: slugify(category.title), image: image },
+    { new: true }
+  );
+
+  res.status(200).json({ message: "Brand updated", data: newBrand });
+});
+
+
+
+
 // ==================================
 // @desc Delete brand
 // @route /api/v1/brand/:id
