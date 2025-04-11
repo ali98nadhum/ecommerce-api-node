@@ -1,7 +1,7 @@
 const uploadPhoto = require("../middlewares/multerConfig");
-const { createBrand, getAllBrands, getOneBrand, deleteBrand } = require("../Controllers/BrandController");
+const { createBrand, getAllBrands, getOneBrand, deleteBrand, updateBrand } = require("../Controllers/BrandController");
 const AuthService = require("../utils/token/AuthService");
-const { createBrandValidator, deleteBrandValidator } = require("../utils/vaildators/brandVaildators");
+const { createBrandValidator, deleteBrandValidator, updateBrandValidator } = require("../utils/vaildators/brandVaildators");
 const router = require("express").Router();
 
 router
@@ -28,6 +28,12 @@ router
     AuthService.allowedTo("superAdmin" , "admin"),
     deleteBrandValidator,
     deleteBrand
+  )
+  .put(
+    AuthService.protect,
+    AuthService.allowedTo("superAdmin" , "admin"),
+    updateBrandValidator,
+    updateBrand
   )
 
 
