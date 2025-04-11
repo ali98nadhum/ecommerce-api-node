@@ -17,6 +17,13 @@ exports.createBrandValidator = [
 ];
 
 
+exports.updateBrandValidator = [
+  check("id").isMongoId().withMessage("Invalid id brand"),
+  VaildatorMiddleware,
+];
+
+
+
 
 exports.deleteBrandValidator = [
   check("id").isMongoId().withMessage("Invalid id brand"),
