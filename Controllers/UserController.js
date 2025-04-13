@@ -96,7 +96,7 @@ module.exports.getProfile = asyncHandler(async(req , res) => {
     return res.status(403).json({message: "You are not authorized get this profile"})
   }
 
-  const user = await UserModel.findById(id)
+  const user = await UserModel.findById(id).select('-password -verificationToken -verificationTokenExpires');
 
   if(!user){
     return res.status(404).json({message: "user not found"})
