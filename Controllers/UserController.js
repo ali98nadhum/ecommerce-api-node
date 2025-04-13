@@ -79,3 +79,28 @@ module.exports.deleteAccount = asyncHandler(async(req , res) => {
 
   res.status(200).json({ message: "User account is deleted" });
 })
+
+
+// ==================================
+// @desc Get user profile
+// @route /api/v1/user/:username/:id
+// @method GET
+// @access private (just for user logged)
+// ==================================
+module.exports.getProfile = asyncHandler(async(req , res) => {
+
+  const {id , username} = req.params;
+
+  if(req.user.id !== id || req.user.username !== username){
+    return res.status(403).json({message: "You are not authorized get this profile"})
+  }
+
+  const user = await UserModel.findById(id)
+
+  if(!user){
+    return res.status(404).json({message: "user not found"})
+  }
+
+  res.status(200).json({data: user})
+
+})
