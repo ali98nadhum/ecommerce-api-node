@@ -16,6 +16,23 @@ module.exports.getAllUsers = asyncHandler(async(req , res) => {
 
 
 
+// ==================================
+// @desc Get user by id
+// @route /api/v1/user/:id
+// @method GET
+// @access private (only admin)
+// ==================================
+module.exports.getUser = asyncHandler(async(req , res) => {
+  const user = await UserModel.findById(req.params.id);
+  if(!user){
+    return res.status(404).json({message: "User account not found"})
+  }
+
+  res.status(200).json({data: user})
+})
+
+
+
 
 // ==================================
 // @desc update user role
