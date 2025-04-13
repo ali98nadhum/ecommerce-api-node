@@ -110,3 +110,9 @@ exports.getUserValidator = [
   check("id").isMongoId().withMessage("Invalid user id"),
   VaildatorMiddleware,
 ];
+
+
+exports.getProfileValidator = [
+  check("id").isMongoId().withMessage("Invalid user id"),
+  VaildatorMiddleware,
+];
