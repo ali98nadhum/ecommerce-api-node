@@ -103,3 +103,10 @@ exports.changePasswordValidator = [
     .withMessage("password must be at least 8 characters"),
   VaildatorMiddleware,
 ];
+
+
+
+exports.getUserValidator = [
+  check("id").isMongoId().withMessage("Invalid user id"),
+  VaildatorMiddleware,
+];
