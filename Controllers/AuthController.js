@@ -106,7 +106,7 @@ module.exports.login = asyncHandler(async (req, res) => {
   }
 
   // Generate a JWT token for a user.
-  const token = generateToken(user.id, user.name, user.username, user.role);
+  const token = generateToken(user.id, user.username, user.name, user.role);
 
   res
     .status(200)

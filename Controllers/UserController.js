@@ -91,6 +91,7 @@ module.exports.getProfile = asyncHandler(async(req , res) => {
 
   const {id , username} = req.params;
 
+
   if(req.user.id !== id || req.user.username !== username){
     return res.status(403).json({message: "You are not authorized get this profile"})
   }
