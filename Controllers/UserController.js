@@ -10,7 +10,7 @@ const { UserModel } = require("../model/UserModel");
 // @access private (only admin)
 // ==================================
 module.exports.getAllUsers = asyncHandler(async(req , res) => {
-  const users = await UserModel.find({})
+  const users = await UserModel.find({}).select('-password -verificationToken -verificationTokenExpires');
   res.status(200).json({data: users})
 })
 
