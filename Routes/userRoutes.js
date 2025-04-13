@@ -1,5 +1,5 @@
-const { deleteAccount, updateUserRole, getAllUsers, getUser } = require("../Controllers/UserController");
-const {deleteAccountValidator, updateUserRoleValidator, getUserValidator,} = require("../utils/vaildators/AuthVaildators");
+const { deleteAccount, updateUserRole, getAllUsers, getUser, getProfile } = require("../Controllers/UserController");
+const {deleteAccountValidator, updateUserRoleValidator, getUserValidator, getProfileValidator,} = require("../utils/vaildators/AuthVaildators");
 const AuthService = require("../utils/token/AuthService");
 
 const router = require("express").Router();
@@ -31,5 +31,13 @@ router
     AuthService.allowedTo("superAdmin" , "admin"),
     getAllUsers
   )
+
+  router
+   .route("/:username/:id")
+   .get(
+    AuthService.protect,
+    getProfileValidator,
+    getProfile
+   )
 
 module.exports = router;
