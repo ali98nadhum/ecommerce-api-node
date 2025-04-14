@@ -23,7 +23,7 @@ module.exports.getAllUsers = asyncHandler(async(req , res) => {
 // @access private (only admin)
 // ==================================
 module.exports.getUser = asyncHandler(async(req , res) => {
-  const user = await UserModel.findById(req.params.id);
+  const user = await UserModel.findById(req.params.id).select('-password -verificationToken -verificationTokenExpires -resetPasswordExpires -resetPasswordToken');
   if(!user){
     return res.status(404).json({message: "User account not found"})
   }
