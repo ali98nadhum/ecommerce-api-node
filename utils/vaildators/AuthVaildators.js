@@ -116,3 +116,12 @@ exports.getProfileValidator = [
   check("id").isMongoId().withMessage("Invalid user id"),
   VaildatorMiddleware,
 ];
+
+
+
+exports.forgetPasswordValidator = [
+  check("email")
+  .notEmpty().withMessage("email is required")
+  .isEmail().withMessage("Invalid email"),
+  VaildatorMiddleware,
+];

@@ -1,5 +1,5 @@
 const { register, login, verifyEmail, changePassword, forgetPassword } = require("../Controllers/AuthController");
-const { registerValidator, loginValidator, changePasswordValidator } = require("../utils/vaildators/AuthVaildators");
+const { registerValidator, loginValidator, changePasswordValidator, forgetPasswordValidator } = require("../utils/vaildators/AuthVaildators");
 const AuthService = require("../utils/token/AuthService");
 
 
@@ -32,7 +32,7 @@ router
 
 router
  .route("/forget-Password")
- .post(forgetPassword)
+ .post(forgetPasswordValidator,forgetPassword)
 
 
 
