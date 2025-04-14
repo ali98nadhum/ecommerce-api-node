@@ -229,3 +229,44 @@ module.exports.forgetPassword = asyncHandler(async(req , res) => {
   }
   
 })
+
+
+
+
+
+
+
+
+
+// ==================================
+// @desc Reset password
+// @route /api/v1/auth/reset-password/:id/:resetToken
+// @method POST
+// @access public
+// ==================================
+module.exports.resetPassword = asyncHandler(async(req , res) => {
+  const { id, resetToken } = req.params;
+  const { newPassword } = req.body;
+
+  const user = await UserModel.findById(id);
+  if (!user) {
+    return res.status(404).json({ message: "المستخدم غير موجود" });
+  }
+
+  if (
+    !user.resetPasswordToken ||
+    user.resetPasswordToken !== resetToken ||
+    user.resetPasswordExpires < new Date()
+  ) {
+    return res.status(400).json({ message: "الرابط غير صالح أو منتهي الصلاحية" });
+  }
+
+  const hashedPassword = await hashPassword(newPassword);
+  user.password = hashedPassword;
+  user.resetPasswordToken = null;
+  user.resetPasswordExpires = null;
+
+  await user.save();
+
+  res.status(200).json({ message: "تم تغيير كلمة المرور بنجاح، يمكنك الآن تسجيل الدخول" });
+})
