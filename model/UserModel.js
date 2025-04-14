@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
     minlength: [8, "password must be at least 8 characters"],
   },
 
-  isVerifird:{
+  isVerifird: {
     type: Boolean,
     default: false,
   },
@@ -48,6 +48,10 @@ const UserSchema = new mongoose.Schema({
   verificationToken: String,
 
   verificationTokenExpires: Date,
+
+  resetPasswordToken: String,
+
+  resetPasswordExpires: Date,
 });
 
 const UserModel = mongoose.model("UserModel", UserSchema);
