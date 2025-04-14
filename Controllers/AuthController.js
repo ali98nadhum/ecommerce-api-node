@@ -6,6 +6,7 @@ const { generateToken } = require("../utils/token/generateToken");
 const randomBytes = require('randombytes');
 const sendEmail = require("../utils/emails/sendEmail");
 const verifyEmailTemplate = require("../utils/emailTemplates/verifyCodeTemplate");
+const resetPasswordTemplate = require("../utils/emailTemplates/resetPasswordTemplate");
 
 
 
