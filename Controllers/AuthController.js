@@ -183,3 +183,48 @@ module.exports.changePassword  = asyncHandler(async(req , res) => {
   res.status(200).json({message: "Password changed successfully"})
 
 })
+
+
+
+
+// ==================================
+// @desc Forget password
+// @route /api/v1/auth/forget-Password
+// @method POST
+// @access public
+// ==================================
+module.exports.forgetPassword = asyncHandler(async(req , res) => {
+  const {email} = req.body;
+
+  const user = await UserModel.findOne({email});
+  if(!user){
+    return res.status(404).json({message: "User not found"})
+  }
+
+  const resetToken = randomBytes(32).toString("hex");
+  const resetTokenExpires = new Date(Date.now() + 10 * 60 * 1000);
+
+  user.resetPasswordToken = resetToken;
+  user.resetPasswordExpires = resetTokenExpires;
+
+  await user.save();
+
+  const resetLink = `${process.env.DOMAIN}/api/v1/auth/reset-password/${user.id}/${resetToken}`;
+
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: "رابط إعادة تعيين كلمة المرور (صالح لمدة 10 دقائق)",
+      message: resetPasswordTemplate(user.email, resetLink),
+    });
+
+    res.status(200).json({
+      message: "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "فشل إرسال البريد الإلكتروني" });
+  }
+  
+})
