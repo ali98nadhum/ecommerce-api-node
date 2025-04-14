@@ -1,5 +1,5 @@
 const { register, login, verifyEmail, changePassword, forgetPassword, resetPassword } = require("../Controllers/AuthController");
-const { registerValidator, loginValidator, changePasswordValidator, forgetPasswordValidator } = require("../utils/vaildators/AuthVaildators");
+const { registerValidator, loginValidator, changePasswordValidator, forgetPasswordValidator, resetPasswordValidator } = require("../utils/vaildators/AuthVaildators");
 const AuthService = require("../utils/token/AuthService");
 
 
@@ -37,7 +37,7 @@ router
 
  router
  .route("/reset-password/:id/:resetToken")
- .post(resetPassword)
+ .post(resetPasswordValidator,resetPassword)
 
 
 

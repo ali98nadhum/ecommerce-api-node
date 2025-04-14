@@ -125,3 +125,14 @@ exports.forgetPasswordValidator = [
   .isEmail().withMessage("Invalid email"),
   VaildatorMiddleware,
 ];
+
+
+
+exports.resetPasswordValidator = [
+  check("newPassword")
+    .notEmpty()
+    .withMessage("password is required")
+    .isLength({ min: 8 })
+    .withMessage("password must be at least 8 characters"),
+  VaildatorMiddleware,
+];
