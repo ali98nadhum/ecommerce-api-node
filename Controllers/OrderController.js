@@ -25,7 +25,7 @@ module.exports.createOrder = asyncHandler(async(req , res) => {
       }
 
       const newOrder = new OrderModel({
-        user: req.user._id,
+        user: req.user.id,
         products,
         totalPrice,
         shippingAddress
@@ -33,5 +33,5 @@ module.exports.createOrder = asyncHandler(async(req , res) => {
   
       await newOrder.save();
 
-      res.status(201).json({ message: "Order created successfully", order: newOrder });
+      res.status(201).json({ message: "Order created successfully", data: newOrder });
 })
