@@ -29,6 +29,12 @@ const OrderSchema = new mongoose.Schema(
       min: 0,
     },
 
+    orderCode: {
+      type: String,
+      required: true,
+      unique: true
+    },
+
     orderStatus: {
       type: String,
       enum: ["pending", "confirmed", "cancelled"],
