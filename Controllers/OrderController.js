@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const { OrderModel } = require("../model/OrderModel");
 const { ProductModel } = require("../model/ProductModel");
+const generateOrderCode = require("../utils/generateOrderCode/generateOrderCode");
 
 
 
@@ -61,13 +62,17 @@ module.exports.createOrder = asyncHandler(async(req , res) => {
          // count total price
          totalPrice += product.priceAfterDiscount? product.priceAfterDiscount * item.quantity : product.price * item.quantity
       }
+
+    //   generate Code for order
+      const orderCode = await generateOrderCode();
       
 
       const newOrder = new OrderModel({
         user: req.user.id,
         products,
         totalPrice,
-        shippingAddress
+        shippingAddress,
+        orderCode
       });
   
       await newOrder.save();
