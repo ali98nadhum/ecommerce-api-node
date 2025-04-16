@@ -20,9 +20,20 @@ module.exports.createOrder = asyncHandler(async(req , res) => {
         if (!product) {
           return res.status(404).json({ message: `Product not found: ${item.product}` });
         }
-  
+      
+        // check if quantity product is found
+        if (product.quantity < item.quantity) {
+          return res.status(400).json({
+            message: `Insufficient stock for product: ${product.title}`,
+            available: product.quantity,
+            requested: item.quantity
+          });
+        }
+      
+         // count total price
         totalPrice += product.price * item.quantity;
       }
+      
 
       const newOrder = new OrderModel({
         user: req.user.id,
