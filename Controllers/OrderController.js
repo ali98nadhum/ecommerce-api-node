@@ -31,7 +31,7 @@ module.exports.createOrder = asyncHandler(async(req , res) => {
         }
       
          // count total price
-        totalPrice += product.price * item.quantity;
+         totalPrice += product.priceAfterDiscount? product.priceAfterDiscount * item.quantity : product.price * item.quantity
       }
       
 
