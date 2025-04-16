@@ -26,6 +26,10 @@ module.exports.getAllOrder = asyncHandler(async(req , res) => {
     filter.deliveryStatus = req.query.deliveryStatus;
   }
 
+  if (req.query.orderCode) {
+    filter.orderCode = { $regex: req.query.orderCode, $options: "i" };
+  }
+
     const orders = await OrderModel.find(filter).skip(skip).limit(limit)
     const totalOrders = await OrderModel.countDocuments(filter);
     res.status(200).json({totalOrders,page,data: orders})
@@ -64,7 +68,7 @@ module.exports.createOrder = asyncHandler(async(req , res) => {
       }
 
     //   generate Code for order
-      const orderCode = await generateOrderCode();
+      const orderCode = await generateOrderCode(req.user.username);
       
 
       const newOrder = new OrderModel({
