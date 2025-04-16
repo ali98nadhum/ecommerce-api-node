@@ -2,6 +2,7 @@ const { check } = require("express-validator");
 const VaildatorMiddleware = require("../../middlewares/vaildatorMiddleware");
 const { SubcategoryModel } = require("../../model/SubcategoryModel");
 const { CategoryModel } = require("../../model/CategoryModel");
+const { ProductModel } = require("../../model/ProductModel");
 
 exports.createProductValidator = [
   check("title")
@@ -92,12 +93,14 @@ exports.updateProductValidator = [
     .optional()
     .isNumeric()
     .withMessage("priceAfterDiscount must be a number")
-    .custom((value, { req }) => {
-      if (req.body.price && parseInt(value) >= parseInt(req.body.price)) {
-        return Promise.reject(
-          new Error("priceAfterDiscount must be lower than price")
-        );
+    .custom(async (value, { req }) => {
+      const productId = req.params.id;
+      const product = await ProductModel.findById(productId);
+  
+      if (parseFloat(value) >= product.price) {
+        throw new Error("priceAfterDiscount must be lower than the original price");
       }
+  
       return true;
     }),
 
