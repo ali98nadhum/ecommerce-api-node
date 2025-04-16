@@ -3,6 +3,19 @@ const { OrderModel } = require("../model/OrderModel");
 const { ProductModel } = require("../model/ProductModel");
 
 
+
+// ==================================
+// @desc Get All orders
+// @route /api/v1/order
+// @method Get
+// @access private (only admin)
+// ==================================
+module.exports.getAllOrder = asyncHandler(async(req , res) => {
+    const orders = await OrderModel.find({})
+    res.status(200).json({data: orders})
+})
+
+
 // ==================================
 // @desc create new order
 // @route /api/v1/order
