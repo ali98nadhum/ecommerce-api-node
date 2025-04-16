@@ -11,8 +11,23 @@ const { ProductModel } = require("../model/ProductModel");
 // @access private (only admin)
 // ==================================
 module.exports.getAllOrder = asyncHandler(async(req , res) => {
-    const orders = await OrderModel.find({})
-    res.status(200).json({data: orders})
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 8 || 8;
+    const skip = (page - 1) * limit;
+
+    const filter = {};
+
+  if (req.query.orderStatus) {
+    filter.orderStatus = req.query.orderStatus;
+  }
+
+  if (req.query.deliveryStatus) {
+    filter.deliveryStatus = req.query.deliveryStatus;
+  }
+
+    const orders = await OrderModel.find(filter).skip(skip).limit(limit)
+    const totalOrders = await OrderModel.countDocuments(filter);
+    res.status(200).json({totalOrders,page,data: orders})
 })
 
 
