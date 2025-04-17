@@ -30,7 +30,7 @@ module.exports.getAllOrder = asyncHandler(async(req , res) => {
     filter.orderCode = { $regex: req.query.orderCode, $options: "i" };
   }
 
-    const orders = await OrderModel.find(filter).skip(skip).limit(limit)
+    const orders = await OrderModel.find(filter).populate("user" , "name username email phone -_id").skip(skip).limit(limit)
     const totalOrders = await OrderModel.countDocuments(filter);
     res.status(200).json({totalOrders,page,data: orders})
 })
