@@ -40,6 +40,16 @@ exports.getOneOrderValidator = [
 
 
 
+  exports.deleteOrderValidator = [
+    check("id")
+    .isMongoId()
+    .withMessage("Invalid id order"),
+    VaildatorMiddleware,
+  ];
+  
+
+
+
 
 
 
