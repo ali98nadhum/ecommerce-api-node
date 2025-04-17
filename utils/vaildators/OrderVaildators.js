@@ -46,6 +46,26 @@ exports.getOneOrderValidator = [
     .withMessage("Invalid id order"),
     VaildatorMiddleware,
   ];
+
+
+  exports.updateOrderValidator = [
+    check("id").isMongoId().withMessage("Invalid id order"),
+
+    body("orderStatus")
+      .optional()
+      .isIn(["pending", "confirmed", "cancelled"])
+      .withMessage(
+        "orderStatus يجب أن يكون أحد القيم التالية: pending, confirmed, cancelled"
+      ),
+
+    body("deliveryStatus")
+      .optional()
+      .isIn(["delivered", "cancelled", "not_shipped", "in_delivery"])
+      .withMessage(
+        "deliveryStatus يجب أن يكون أحد القيم التالية: delivered, cancelled, not_shipped, in_delivery"
+      ),
+    VaildatorMiddleware,
+  ];
   
 
 
