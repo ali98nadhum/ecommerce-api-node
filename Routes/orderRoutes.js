@@ -1,6 +1,6 @@
-const { createOrder, getAllOrder, getOneOrder, deleteOrder } = require("../Controllers/OrderController");
+const { createOrder, getAllOrder, getOneOrder, deleteOrder, updateOrder } = require("../Controllers/OrderController");
 const AuthService = require("../utils/token/AuthService");
-const { createOrderValidator, getOneOrderValidator, deleteOrderValidator } = require("../utils/vaildators/OrderVaildators");
+const { createOrderValidator, getOneOrderValidator, deleteOrderValidator, updateOrderValidator } = require("../utils/vaildators/OrderVaildators");
 const router = require("express").Router();
 
 
@@ -24,6 +24,12 @@ const router = require("express").Router();
     AuthService.allowedTo("superAdmin" , "admin"),
     deleteOrderValidator,
     deleteOrder
+  )
+  .put(
+    AuthService.protect,
+    AuthService.allowedTo("superAdmin" , "admin"),
+    updateOrderValidator,
+    updateOrder
   )
 
 
