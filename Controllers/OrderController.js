@@ -36,6 +36,30 @@ module.exports.getAllOrder = asyncHandler(async(req , res) => {
 })
 
 
+
+
+
+
+
+
+
+
+// ==================================
+// @desc Get order by id
+// @route /api/v1/order/:id
+// @method Get
+// @access private (only admin)
+// ==================================
+module.exports.getOneOrder = asyncHandler(async(req , res) => {
+  const order = await OrderModel.findById(req.params.id).populate("user" , "name username email phone -_id");
+  if(!order){
+    return res.status(404).json({message: "Order not found"})
+  }
+
+  res.status(200).json({data: order})
+})
+
+
 // ==================================
 // @desc create new order
 // @route /api/v1/order
