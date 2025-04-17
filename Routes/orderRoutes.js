@@ -1,6 +1,6 @@
-const { createOrder, getAllOrder } = require("../Controllers/OrderController");
+const { createOrder, getAllOrder, getOneOrder } = require("../Controllers/OrderController");
 const AuthService = require("../utils/token/AuthService");
-const { createOrderValidator } = require("../utils/vaildators/OrderVaildators");
+const { createOrderValidator, getOneOrderValidator } = require("../utils/vaildators/OrderVaildators");
 const router = require("express").Router();
 
 
@@ -9,6 +9,11 @@ const router = require("express").Router();
   .route("/")
   .post(AuthService.protect,createOrderValidator , createOrder)
   .get(AuthService.protect , AuthService.allowedTo("superAdmin" , "admin") , getAllOrder)
+
+
+  router
+  .route("/:id")
+  .get(AuthService.protect,AuthService.allowedTo("superAdmin" , "admin") , getOneOrderValidator , getOneOrder)
 
 
 module.exports = router;
