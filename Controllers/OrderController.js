@@ -41,9 +41,6 @@ module.exports.getAllOrder = asyncHandler(async(req , res) => {
 
 
 
-
-
-
 // ==================================
 // @desc Get order by id
 // @route /api/v1/order/:id
@@ -58,6 +55,9 @@ module.exports.getOneOrder = asyncHandler(async(req , res) => {
 
   res.status(200).json({data: order})
 })
+
+
+
 
 
 // ==================================
@@ -106,4 +106,19 @@ module.exports.createOrder = asyncHandler(async(req , res) => {
       await newOrder.save();
 
       res.status(201).json({ message: "Order created successfully", data: newOrder });
+})
+
+
+
+
+
+// ==================================
+// @desc delete order
+// @route /api/v1/order/:id
+// @method Get
+// @access private (only admin)
+// ==================================
+module.exports.deleteOrder = asyncHandler(async(req , res) => {
+  const order = await OrderModel.findOneAndDelete(req.params.id);
+  res.status(200).json({message: "order deleted Successfully"})
 })
