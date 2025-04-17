@@ -8,7 +8,7 @@ const generateOrderCode = require("../utils/generateOrderCode/generateOrderCode"
 // ==================================
 // @desc Get All orders
 // @route /api/v1/order
-// @method Get
+// @method GET
 // @access private (only admin)
 // ==================================
 module.exports.getAllOrder = asyncHandler(async(req , res) => {
@@ -44,7 +44,7 @@ module.exports.getAllOrder = asyncHandler(async(req , res) => {
 // ==================================
 // @desc Get order by id
 // @route /api/v1/order/:id
-// @method Get
+// @method GET
 // @access private (only admin)
 // ==================================
 module.exports.getOneOrder = asyncHandler(async(req , res) => {
@@ -109,13 +109,38 @@ module.exports.createOrder = asyncHandler(async(req , res) => {
 })
 
 
+// ==================================
+// @desc update order
+// @route /api/v1/order/:id
+// @method PUT
+// @access private (only admin)
+// ==================================
+module.exports.updateOrder = asyncHandler(async(req , res) => {
+  const {orderStatus , deliveryStatus} = req.body;
+  const order = await OrderModel.findByIdAndUpdate(
+    req.params.id,
+    {
+      orderStatus,
+      deliveryStatus
+    },
+    {new : true}
+  )
+
+  if(!order){
+    return res.status(404).json({message: `not found order for this id ${req.params.id}`})
+  }
+
+  res.status(200).json({message: "Order updated Successfully" , data:order})
+})
+
+
 
 
 
 // ==================================
 // @desc delete order
 // @route /api/v1/order/:id
-// @method Get
+// @method DELETE
 // @access private (only admin)
 // ==================================
 module.exports.deleteOrder = asyncHandler(async(req , res) => {
