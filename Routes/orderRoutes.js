@@ -1,6 +1,6 @@
 const { createOrder, getAllOrder, getOneOrder, deleteOrder, updateOrder, getMyOrders } = require("../Controllers/OrderController");
 const AuthService = require("../utils/token/AuthService");
-const { createOrderValidator, getOneOrderValidator, deleteOrderValidator, updateOrderValidator } = require("../utils/vaildators/OrderVaildators");
+const { createOrderValidator, getOneOrderValidator, deleteOrderValidator, updateOrderValidator , getMyOrderValidator } = require("../utils/vaildators/OrderVaildators");
 const router = require("express").Router();
 
 
@@ -36,6 +36,7 @@ const router = require("express").Router();
   .route("/my-order/:id")
   .get(
     AuthService.protect,
+    getMyOrderValidator,
     getMyOrders
   )
 
