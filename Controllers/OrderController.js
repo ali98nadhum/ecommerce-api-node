@@ -124,23 +124,46 @@ module.exports.createOrder = asyncHandler(async(req , res) => {
 // @method PUT
 // @access private (only admin)
 // ==================================
-module.exports.updateOrder = asyncHandler(async(req , res) => {
-  const {orderStatus , deliveryStatus} = req.body;
-  const order = await OrderModel.findByIdAndUpdate(
+module.exports.updateOrder = asyncHandler(async (req, res) => {
+  const { orderStatus, deliveryStatus } = req.body;
+
+  const order = await OrderModel.findById(req.params.id);
+
+  if (!order) {
+    return res.status(404).json({ message: `Order not found with id ${req.params.id}` });
+  }
+
+
+  if (orderStatus === 'cancelled') {
+    
+    for (const item of order.products) {
+      await ProductModel.findByIdAndUpdate(
+        item.product,
+        { $inc: { quantity: item.quantity } },
+        { new: true }
+      );
+    }
+
+    order.orderStatus = 'cancelled';
+    order.deliveryStatus = 'cancelled';
+    await order.save();
+
+    return res.status(200).json({message: 'Order cancelled and stock restored successfully'});
+  }
+
+
+  const updatedOrder = await OrderModel.findByIdAndUpdate(
     req.params.id,
     {
       orderStatus,
       deliveryStatus
     },
-    {new : true}
-  )
+    { new: true }
+  );
 
-  if(!order){
-    return res.status(404).json({message: `not found order for this id ${req.params.id}`})
-  }
+  res.status(200).json({message: 'Order updated successfully',data: updatedOrder});
+});
 
-  res.status(200).json({message: "Order updated Successfully" , data:order})
-})
 
 
 
