@@ -69,6 +69,13 @@ exports.getOneOrderValidator = [
   
 
 
+  exports.getMyOrderValidator = [
+    check("id")
+    .isMongoId()
+    .withMessage("Invalid id order"),
+    VaildatorMiddleware,
+  ];
+
 
 
 
