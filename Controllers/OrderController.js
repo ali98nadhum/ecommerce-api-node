@@ -105,6 +105,15 @@ module.exports.createOrder = asyncHandler(async(req , res) => {
   
       await newOrder.save();
 
+      // update quantity in db
+      for (const item of products) {
+        await ProductModel.findByIdAndUpdate(
+          item.product,
+          { $inc: { quantity: -item.quantity } },
+          { new: true }
+        );
+      }
+
       res.status(201).json({ message: "Order created successfully", data: newOrder });
 })
 
