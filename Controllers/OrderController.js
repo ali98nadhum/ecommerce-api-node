@@ -187,7 +187,7 @@ module.exports.deleteOrder = asyncHandler(async(req , res) => {
 
 // ==================================
 // @desc Get my orders
-// @route /api/v1/order/:id
+// @route /api/v1/order/my-order/:id
 // @method GET
 // @access private (just for login user)
 // ==================================
