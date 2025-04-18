@@ -135,7 +135,7 @@ module.exports.updateOrder = asyncHandler(async (req, res) => {
 
 
   if (orderStatus === 'cancelled') {
-    
+
     for (const item of order.products) {
       await ProductModel.findByIdAndUpdate(
         item.product,
@@ -181,4 +181,28 @@ module.exports.deleteOrder = asyncHandler(async(req , res) => {
     return res.status(404).json({message: `not found order for this id ${req.params.id}`})
   }
   res.status(200).json({message: "order deleted Successfully"})
+})
+
+
+
+// ==================================
+// @desc Get my orders
+// @route /api/v1/order/:id
+// @method GET
+// @access private (just for login user)
+// ==================================
+module.exports.getMyOrders = asyncHandler(async(req, res) => {
+  const {id} = req.params;
+  
+  if(req.user.id !== id){
+    return res.status(403).json({message: "You are not authorized get this orders list"})
+  }
+
+  const orders = await OrderModel.find({user:id})
+
+  if (!orders) {
+    return res.status(404).json({ message: "No orders found for this user" });
+  }
+
+  res.status(200).json({ data: orders });
 })
