@@ -51,6 +51,11 @@ const ProductSchema = new mongoose.Schema(
       default: true,
     },
 
+    bestSeller: {
+      type: Boolean,
+      default: false,
+    },
+
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "CategoryModel",
