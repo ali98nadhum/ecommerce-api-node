@@ -32,7 +32,7 @@ const OrderSchema = new mongoose.Schema(
     orderCode: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
     },
 
     orderStatus: {
