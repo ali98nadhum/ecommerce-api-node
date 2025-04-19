@@ -7,8 +7,16 @@ const router = require("express").Router();
 
   router
   .route("/")
-  .post(AuthService.protect,createOrderValidator , createOrder)
-  .get(AuthService.protect , AuthService.allowedTo("superAdmin" , "admin") , getAllOrder)
+  .post(
+    AuthService.protect,
+    createOrderValidator , 
+    createOrder
+  )
+  .get(
+    AuthService.protect , 
+    AuthService.allowedTo("superAdmin" , "admin") ,
+     getAllOrder
+    )
 
 
   router
