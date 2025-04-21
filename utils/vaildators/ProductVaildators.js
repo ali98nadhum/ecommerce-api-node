@@ -110,6 +110,12 @@ exports.updateProductValidator = [
     .withMessage("isAvailable must be a boolean")
     .toBoolean(),
 
+    check("bestSeller")
+    .optional()
+    .isBoolean()
+    .withMessage("best Seller must be a boolean")
+    .toBoolean(),
+
   check("quantity")
     .optional()
     .isNumeric()
