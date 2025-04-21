@@ -125,6 +125,7 @@ module.exports.updateProduct = asyncHandler(async(req , res) => {
             priceAfterDiscount: req.body.priceAfterDiscount,
             quantity: req.body.quantity,
             isAvailable: req.body.isAvailable,
+            bestSeller: req.body.bestSeller,
             category: req.body.category,
             subcategory: req.body.subcategory,
             imageCover: imageCover
